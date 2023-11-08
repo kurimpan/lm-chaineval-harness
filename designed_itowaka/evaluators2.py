@@ -28,11 +28,19 @@ class Evaluator:
             predictions = [d['model_output'] for d in data]
             # accuracy スコアを計算
             score = self.metric.compute(predictions=predictions, references=references)['accuracy']
+
+        elif self.metric.name == "f1":
+            # F1スコアの計算に必要な正解ラベルと予測ラベルのリストを準備
+            references = [d[keymap.get('result')] for d in data]
+            predictions = [d['model_output'] for d in data]
+            # F1スコアを計算
+            score = self.metric.compute(predictions=predictions, references=references)["f1"]
+
         else:
             pass
 
-        record['score'] = score
-        return record
+        #record['score'] = score
+        return score
 
 def load_evaluator(metric_name):
     # 指定されたメトリック名に基づいてメトリックをロードする
